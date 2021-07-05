@@ -1,0 +1,62 @@
+<div class='card'>
+    <div class='card-header'>
+        {{pageTitle}}
+    </div>
+    <div class='card-body'>
+        <div class='row'>
+            <div class='col-md-2'>
+                Filter By:
+            </div>
+            <div class='col-md-4'><input type='text' [(ngModel)]='listFilter'/></div>
+        </div>
+        <div class='row'>
+            <div class='col-md-6'>
+                <h4>Filtered By:{{listFilter}}</h4>
+            </div>
+        </div>
+        <div class='table-responsive'>
+            <table class='table'
+                   *ngIf='products.length'>
+                <thead>
+                    <tr>
+                        <th>
+                            <button class='btn btn-primary' (click)='toggleButton()'>{{showImage ? 'Hide' : 'Show'}} Image</button>
+                        </th>
+                        <th>Product</th>
+                        <th>Code</th>
+                        <th>Available</th>
+                        <th>Price</th>
+                        <th>5 Star Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor = 'let product of filteredProducts'>
+                    <td>
+                        <img [src]='product.imageUrl' 
+                        [title]='product.productName'
+                        [style.width.px]='imageWidth' [style.margin.px]='imageMargin '
+                        *ngIf='showImage'>
+                    </td>
+                    <td>
+                        <!--This syntax is used when we want to pass param to route-->
+                    <a [routerLink]="['/products', product.productId]">
+                        {{product.productName}}
+                    </a></td>
+                    <!--here convertToSpace is a custom pipe-->
+                    <td>{{product.productCode | lowercase | convertToSpace:'-'}}</td>
+                    <td>{{product.releaseDate}}</td>
+                    <td>{{product.price | currency:'INR':'symbol':'1.2-2'}}</td>
+                    <!--Here we use nested star component using directive defines in star component-->
+                    <!--here we pass rating property from product array of 
+                    container product-list componentto rating property of nested 
+                    star component -->
+                    <td><pm-star [rating]='product.starRating'
+                        (ratingClicked)='onRatingClicked($event)'></pm-star></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
